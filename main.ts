@@ -156,6 +156,31 @@ namespace OLED12864 {
             charX += 6
         }
     }
+    //% block="OLED show number NO FLICKER at x $x page $page num $num"
+    //% x.min=0 x.max=122 page.min=0 page.max=6
+    export function showNumberNoFlicker(x: number, page: number, num: number) {
+        // 1. 只擦除旧数字区域（5个字符宽，不影响全屏）
+        command(SSD1306_SETCOLUMNADRESS)
+        command(x)
+        command(x + 30)  // 5个数字宽度
+        command(SSD1306_SETPAGEADRESS)
+        command(page)
+        command(page + 1)  // 占2行，保证完整显示
+    
+        let buf = pins.createBuffer(2)
+        buf[0] = 0x40
+        for (let i = 0; i < 30; i++) {
+            buf[1] = 0
+            pins.i2cWriteBuffer(chipAdress, buf)
+        }
+    
+        // 2. 移动光标
+        charX = x
+        charY = page
+    
+        // 3. 画新数字（不闪！）
+        writeNum(num)
+    }
     //% block="show (without newline) number $n"
     //% weight=5
     export function writeNum(n: number) {
