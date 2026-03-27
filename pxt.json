@@ -1,0 +1,13 @@
+{
+    "name": "my-oled",
+    "version": "1.0.0",
+    "description": "My OLED Extension",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "main.ts"
+    ],
+    "icon": "☁️",
+    "public": true
+}
